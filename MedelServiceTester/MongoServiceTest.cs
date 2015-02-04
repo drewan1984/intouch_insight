@@ -154,6 +154,7 @@ namespace MedelServiceTester
             Assert.IsTrue(TypeContainsOnlyProperties(countryType, fields));
         }
 
+        /*
         [TestCase]
         public void ValidateCountryField(
             [Values(
@@ -168,6 +169,7 @@ namespace MedelServiceTester
             
             Assert.IsTrue(field == null || TypeContainsProperty(typeof(ICountry), field));
         }
+        */
 
         [TestCase]
         public void GetCountries_NoQueryParams()
@@ -190,6 +192,7 @@ namespace MedelServiceTester
             Assert.IsNotEmpty(countries, QueryNoResultsMessage(query: "GetCountries"));
         }
 
+        /*
         [TestCase]
         public void GetCountries_QueryParamRangeValdiation(
             [Values(null,Sort.Ascending,Sort.Descending)] Sort sort,
@@ -208,12 +211,34 @@ namespace MedelServiceTester
 
             Assert.IsNotNull(countries,"Result should always return at least an empty list.");
         }
+         * */
+        [TestCase]
+        public void GetCountries_QueryParamValdiation()
+        {
+            var countries = service.GetCountries(new QueryParams
+            {
+                Count = 10,
+                Sort = Sort.Ascending,
+                SortProperty = country_silverMedals,
+                Start = 0
+            });
 
+            Assert.IsNotNull(countries, "Result should always return at least an empty list.");
+        }
+
+        /*
         [TestCase]
         public void GetCountries_Year_NoQueryParams(
             [Range(expectedYearMin,expectedYearMax,expectedYearStep)] int year)
         {
             var countries = service.GetCountries(year);
+            Assert.IsNotEmpty(countries, "Result should always return at least one result.");
+        }*/
+
+        [TestCase]
+        public void GetCountries_Year_NoQueryParams()
+        {
+            var countries = service.GetCountries(2012);
             Assert.IsNotEmpty(countries, "Result should always return at least one result.");
         }
 
@@ -233,6 +258,7 @@ namespace MedelServiceTester
                 Assert.IsNotNull(service.GetCountry(countryName), IsNullMessage(countryName));
         }
 
+        /*
         [TestCase]
         public void GetCountry_ValidateResultType(
             [Range(expectedYearMin,expectedYearMax,expectedYearStep)] int year)
@@ -240,7 +266,13 @@ namespace MedelServiceTester
             var country = service.GetCountry(year, expectedCountry);
             ValidateCountry(country);
         }
+        */
 
+        public void GetCountry_Year_ValidateResultType()
+        {
+            var country = service.GetCountry(2002, expectedCountry);
+            ValidateCountry(country);
+        }
 
         #endregion
 
@@ -268,6 +300,7 @@ namespace MedelServiceTester
             Assert.IsTrue(TypeContainsOnlyProperties(athleteType, fields));
         }
 
+        /*
         [TestCase]
         public void ValidateAthletesField(
             [Values(
@@ -287,7 +320,7 @@ namespace MedelServiceTester
         {
 
             Assert.IsTrue(field == null || TypeContainsProperty(typeof(IAthlete), field));
-        }
+        }*/
 
         [TestCase]
         public void GetAthletes_NoQueryParams()
@@ -310,6 +343,7 @@ namespace MedelServiceTester
             Assert.IsNotEmpty(countries, QueryNoResultsMessage(query: "GetAthletes"));
         }
 
+        /*
         [TestCase]
         public void GetAthletes_QueryParamRangeValdiation(
             [Values(null, Sort.Ascending, Sort.Descending)] Sort sort,
@@ -338,13 +372,36 @@ namespace MedelServiceTester
             });
 
             Assert.IsNotNull(athletes, "Result should always return at least an empty list.");
+        } */
+
+        [TestCase]
+        public void GetAthletes_QueryParamRangeValdiation()
+        {
+            var athletes = service.GetAthletes(new QueryParams
+            {
+                Count = 30,
+                Sort = Sort.Descending,
+                SortProperty = athlete_goldMedals,
+                Start = 2
+            });
+
+            Assert.IsNotNull(athletes, "Result should always return at least an empty list.");
         }
 
+        /*
         [TestCase]
         public void GetAthletes_Year_NoQueryParams(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
         {
             var countries = service.GetAthletes(year);
+            Assert.IsNotEmpty(countries, "Result should always return at least one result.");
+        }
+        */
+
+        [TestCase]
+        public void GetAthletes_Year_NoQueryParams()
+        {
+            var countries = service.GetAthletes(2012);
             Assert.IsNotEmpty(countries, "Result should always return at least one result.");
         }
 
@@ -361,6 +418,7 @@ namespace MedelServiceTester
             Assert.IsNotEmpty(athletes, "Result should always return at least one result.");
         }
 
+        /*
         [TestCase]
         public void GetAthletes_Year_CountryName_NoQueryParams(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
@@ -369,9 +427,18 @@ namespace MedelServiceTester
             var athletes = default(List<IAthlete>);
              athletes = service.GetAthletes(year,expectedCountry);
             Assert.IsNotEmpty(athletes, "Result should always return at least one result.");
+        }*/
+
+        [TestCase]
+        public void GetAthletes_Year_CountryName_NoQueryParams()
+        {
+            var countryNames = service.GetCountries().Select(c => c.Name);
+            var athletes = default(List<IAthlete>);
+            athletes = service.GetAthletes(2010, expectedCountry);
+            Assert.IsNotEmpty(athletes, "Result should always return at least one result.");
         }
 
-
+        /*
         [TestCase]
         public void GetAthletes_Year_QueryParams(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
@@ -381,6 +448,20 @@ namespace MedelServiceTester
                 { 
                     Count = 1, 
                     Start = 1, 
+                    SortProperty = athlete_name,
+                    Sort = Sort.Ascending
+                });
+            Assert.IsNotEmpty(countries, "Result should always return at least one result.");
+        }
+         * */
+        [TestCase]
+        public void GetAthletes_Year_QueryParams()
+        {
+            var countries = service.GetAthletes(2000,
+                new QueryParams
+                {
+                    Count = 1,
+                    Start = 1,
                     SortProperty = athlete_name,
                     Sort = Sort.Ascending
                 });
@@ -407,6 +488,7 @@ namespace MedelServiceTester
             Assert.IsNotEmpty(athletes, "Result should always return at least one result.");
         }
 
+        /*
         [TestCase]
         public void GetCountries_Year_CountryName_QueryParams(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
@@ -414,6 +496,22 @@ namespace MedelServiceTester
             var countryNames = service.GetCountries().Select(c => c.Name);
             var athletes = default(List<IAthlete>);
             athletes = service.GetAthletes(year, expectedCountry,
+                new QueryParams
+                {
+                    Count = 1,
+                    Start = 1,
+                    SortProperty = athlete_name,
+                    Sort = Sort.Ascending
+                });
+            Assert.IsNotEmpty(athletes, "Result should always return at least one result.");
+        }
+        */
+        [TestCase]
+        public void GetCountries_Year_CountryName_QueryParams()
+        {
+            var countryNames = service.GetCountries().Select(c => c.Name);
+            var athletes = default(List<IAthlete>);
+            athletes = service.GetAthletes(2010, expectedCountry,
                 new QueryParams
                 {
                     Count = 1,
@@ -440,6 +538,7 @@ namespace MedelServiceTester
             Assert.IsNotNull(service.GetAlthlete(athletesId), IsNullMessage(athletesId));
         }
 
+        /*
         [TestCase]
         public void GetAthlete_ValidateResultType(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
@@ -449,7 +548,15 @@ namespace MedelServiceTester
             ValidateAthlete(athlete);
         }
 
+        */
 
+        [TestCase]
+        public void GetAthlete_By_Year_ValidateResultType()
+        {
+            var foundAthlete = service.GetAthletes().First();
+            var athlete = service.GetAlthlete(foundAthlete.Year, foundAthlete.Id);
+            ValidateAthlete(athlete);
+        }
 
         #endregion
 
@@ -471,6 +578,7 @@ namespace MedelServiceTester
             Assert.IsTrue(TypeContainsOnlyProperties(sportType, fields));
         }
 
+        /*
         [TestCase]
         public void ValidateSportField(
             [Values(
@@ -485,17 +593,23 @@ namespace MedelServiceTester
 
             Assert.IsTrue(field == null || TypeContainsProperty(typeof(ISportMedal), field));
         }
-
+        */
 
         [TestCase]
+        public void GetSportMedals_Year_2000()
+        {
+            var sportMedals = service.GetSportMedals(2000);
+            Assert.IsNotEmpty(sportMedals, "Result should always return at least one result.");
+        }
+
+        /*
+        [TestCase]
         public void GetSportMedals_Year(
-            [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year,
-            object o
-            )
+            [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
         {
             var sportMedals = service.GetSportMedals(year);
             Assert.IsNotEmpty(sportMedals, "Result should always return at least one result.");
-        }
+        }*/
 
         [TestCase]
         public void GetSportMedals_CountryName()
@@ -510,6 +624,7 @@ namespace MedelServiceTester
             Assert.IsNotEmpty(sportMedals, "Result should always return at least one result.");
         }
 
+        /*
         [TestCase]
         public void GetSportMedals_Year_CountryName(
             [Range(expectedYearMin, expectedYearMax, expectedYearStep)] int year)
@@ -518,7 +633,15 @@ namespace MedelServiceTester
             sportMedals = service.GetSportMedals(expectedCountry, year);
             Assert.IsNotEmpty(sportMedals, "Result should always return at least one result.");
         }
+        */
 
+        [TestCase]
+        public void GetSportMedals_Year_CountryName()
+        {
+            var sportMedals = default(List<ISportMedal>);
+            sportMedals = service.GetSportMedals(expectedCountry, 2004);
+            Assert.IsNotEmpty(sportMedals, "Result should always return at least one result.");
+        }
 
         #endregion
     }
