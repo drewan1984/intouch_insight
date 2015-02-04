@@ -18,13 +18,13 @@ This application provides a web-based user interface to query and analyze Olympi
 ----------
 
 ### Overview
-Currently this application resides on a single web page. This single web page consists of two charts, two data tables and a drop down menu. 
+Currently this application resides on a single web page. This single web page consists of two charts, two data tables and a single drop down menu. 
 
 #### Country Data Table
 The first data table, **the country table**, drives the application. It provides the Olympic Medal counts by Country for a specified year.
 
-* *The year may be specified using the drop-down in the upper left-hand corner of the web page.*
-* *Columns may be sorted by clicking the desired column headings*
+* *The year may be specified using the drop-down menu in the upper left-hand corner of the web page.*
+* *Columns may be sorted by clicking the desired column headings. Each click will switch the sort between ascending and descending*
 * *Table page sizes may be adjusted using the "Countries Per page" drop down menu above the table.*
 
 #### Athlete Data Table
@@ -43,10 +43,10 @@ The charts above the country data table provide graphical representations of the
 
 ### Missing Features
 
-* Upon selection items in the charts (eg. Medal breakdown bar chart, Medal distribution pie chart) the athletes table could filter based upon chart selection.
+* Upon selection of items within the charts (eg. Medal breakdown bar chart, Medal distribution pie chart) the athletes table could filter based upon chart selection.
 	* *eg. If the "Gold" bar of the bar chart is selected, all the athletes who won gold for the current country should be shown in the athletes table.*
 	*  *eg. If the "Badminton" pie slice is selected in the pie chart, all the athletes who won in badminton for the current the country should be shown.*
-* A drill-down versus stacked approach may have been better to represent the data. 
+* A drill-down versus stacked approach may have been better to visually represent the data. 
 * The application could use more charts and data perspectives.
 * Columns filters and search features could have been provided for the tabular data.
 
