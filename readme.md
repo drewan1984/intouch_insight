@@ -35,7 +35,8 @@
 * The MongoDB server should have been configured as a Windows service.
 * The intent was to start development within windows and then migrate to Linux (Mono(.NET Runtime) + MonoDevelop(IDE)). This would have provided for easier automation scripting.
 * The OlympicAthletes.xlsx was manually downloaded and then converted using Excel. The intent was to write a script and then use 'wget' to download .xlxs and then hopefully use an opensource tool or custom tool to convert from .xlsx to .csv. The .csv file would then be imported into mongodb using the mongoimport (linux equivalent) utility. 
-* In hindsight I should have developed the Front-end with Silverlight instead of Javascript and HTML. I spent much of my time  googling syntax and the JavaScript library (eg. JQuery,Google Charts) apis. 
+* In hindsight I should have developed the Front-end with Silverlight instead of Javascript and HTML. I spent much of my time  googling syntax and the JavaScript library (eg. JQuery,Google Charts) apis. There was not enought time  was left for the visual UI design and the JavaScript and HTML code structure. 
+* If the application was developed in Silverlight I would have been able to easily apply the MVVM patter to the Front-End. Where now with the current JavaScript the visual and controller logic is meshed together.
 * Unfortunately I was only able to provide unit testing for my back-end data service interface. I did not have time to learn the Nancy Testing framework.
 * Overall working on this application has been positve learning experience. 
 
