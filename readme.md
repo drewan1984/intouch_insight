@@ -9,10 +9,10 @@
 5. Open a Windows command console and navigate to your MongoDB installation directory. (eg. *"C:/%ProgramFiles%/MongoDB 2.X Standard"*).
 6. Locate the  *bin/* directory found within your MongoDB installation directory. Start the mongo database server by running *mongod.exe*.
 7. Download the source code for the application from the following GitHub repository: https://github.com/drewan1984/intouch_insight. 
-8. Open a new Windows command console and navigate to the same bin/ directory within the Mongo directory and run the following command: *"mongoimport --db oymdb --collection medal_winners --type csv --headerline --file %PROJECT_SOURCE_PATH%/medals.csv*".  Where **oymdb** is the name of the database. Where **medal_winners** is the name of a collection within the database. **%PROJECT_SOURCE_PATH% is the path where the application source files from github reside on the local system. And finally **medals.csv** which is the .csv file which is being imported into MongoDB.
+8. Open a new Windows command console and navigate to the same bin/ directory within the Mongo directory and run the following command: *"mongoimport --db oymdb --collection medal_winners --type csv --headerline --file %PROJECT_SOURCE_PATH%/medals.csv"*.  Where **oymdb** is the name of the database. Where **medal_winners** is the name of a collection within the database.  Where **%PROJECT_SOURCE_PATH%** is the path where the application source files from github reside on the local system. And finally **medals.csv** is the .csv file which is being used to import the data into MongoDB.
 9. Open Visual Studio 2013 Community Edition as Administrator. Right-Click Visual Studio shortcut and select "Run as Administrator".
-10. From Visual Studio select *"FILE -> OPEN -> Project/Solution"* and locate the recently downloaded source files you download from GitHub. Once located select: *MedalService.sln*
-11. Once the solution has opened in Visual Studio,  right-click the solution node "Solution 'MedalService'" from the Solution Explorer and select *Enable Nuget Package Restore*."
+10. From Visual Studio select *"FILE -> OPEN -> Project/Solution"* and locate the recently downloaded source files you downloaded from GitHub. This will load the Visual Studio source code solution for the application.
+11. Once the solution has been loaded in Visual Studio,  right-click the solution node "Solution 'MedalService'" from the Solution Explorer and select *Enable Nuget Package Restore*."
 12. Build the solution. While building the nuget package dependencies should automatically be downloaded and referenced by the projects needing them.
 
 ### Application Start Up
