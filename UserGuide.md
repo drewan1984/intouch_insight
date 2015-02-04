@@ -1,6 +1,5 @@
-**In-Touch Insight Systems Inc.**
-==================================
-*Developer technical interview*
+### **In-Touch Insight Systems Inc.**
+#### *Developer technical interview*
 -------------------------------
 
 **Option 2**: Proof-Of-Concept Dashboard
@@ -26,7 +25,7 @@ The first data table, **the country table**, drives the application. It provides
 
 * *The year may be specified using the drop-down in the upper left-hand corner of the web page.*
 * *Columns may be sorted by clicking the desired column headings*
-* *Table page sizes may be adjusted using the *Countries Per page* drop down menu above the table.*
+* *Table page sizes may be adjusted using the "Countries Per page" drop down menu above the table.*
 
 #### Athlete Data Table
 The second data table, **the athlete table**, provides the athletes for the country selected within the country data table.
