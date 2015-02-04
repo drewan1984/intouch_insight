@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var currentYear = 2012;
+        var countryDataTable;
+        var countryChartTable;
+        var countryChartTableOptions;
+        var currentCountryTableCount;
+        var currentCountry;
+        var currentCountryPage;
+        var currentCountrySort;
+        var currentCountrySortProperty;
+
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1', { 'packages': ['table', 'geochart', 'corechart', 'controls'] });
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(googleChartsInit);
+
+        //Initialize Google Data Table and Charts.
+        function googleChartsInit()
+        {
+            currentCountryTableCount = 10;
+            currentCountryPage = 0;
+            currentCountrySort = "DS"
+            currentCountrySortProperty = "Name";
+            currentYear = 2012;
+
+            countryChartTable = new google.visualization.Table(document.getElementById('Countrytable_div'));
+            countryChartTableOptions =
+            {
+                page: 'event',
+                pageSize: currentCountryTableCount,
+                sort: 'event',
+                sortAscending: false,
+                sortColumn: 0,
+                showRowNumber: true,
+                pagingSymbols : { prev: 'prev', next: 'next'},
+                pagingButtonsConfiguration: 'both'
+            };
+
+            var tableListener = google.visualization.events.addListener;
+            tableListener(countryChartTable, 'page', function (e) { onPage(e); });
+            tableListener(countryChartTable, 'sort', function (e) { onSort(e); });
+            tableListener(countryChartTable, 'select', function (e) { onSelected(e); });
+
+            drawCountryTable();
+            manualSelection();
+        }
+        function onSort(e)
+        {
+            countryChartTableOptions['sortColumn'] = e.column;
+            countryChartTableOptions['sortAscending'] = e.ascending;
+            currentCountryPage = 0;
+            setSorting(e.ascending, e.column);
+            countryChartTable.setSelection([{ row: 0, column: null }])
+            manualSelection();
+        }
+        function onPage(e)
+        {
+            if (e.page == 0) {
+                if (currentCountryPage > 0)
+                {
+                    currentCountryPage -= 1;
+                }
+            }
+            else
+                currentCountryPage += 1;
+
+            countryChartTableOptions['firstRowNumber'] = (currentCountryPage * currentCountryTableCount) + 1;
+
+            drawCountryTable();
+            manualSelection();
+        }
+
+        function manualSelection()
+        {
+            countryChartTable.setSelection([{ row: 0, column: null }])
+            onSelected();
+        }
+        function onSelected(e)
+        {
+           drawSelection();
+        }
+
+        function drawSelection()
+        {
+            var selectedItem = countryChartTable.getSelection()[0];
+
+            if (selectedItem)
+            {
+                currentCountry = countryDataTable.getValue(selectedItem.row, 0);
+            }
+
+            jQuery("#current_country").text(currentCountry);
+            drawBarchart(selectedItem);
+            drawPieChart();
+            drawAthleteTable();
+        }
+        function drawBarchart(selectedItem)
+        {
+            var options = {
+                title: 'Medals',
+                hAxis: { title: 'Count', titleTextStyle: { color: 'red' }, maxValue: '300' },
+                legend: { position: "none" },
+                
+            };
+
+            var barChart = new google.visualization.BarChart(document.getElementById('medalBarCharth_div'));
+
+            barChartTable = new google.visualization.arrayToDataTable
+                ([
+                    ['Medal', 'Count', { role: 'style' }],
+                    ['Gold',   countryDataTable.getValue(selectedItem.row, 1), 'gold'],
+                    ['Silver', countryDataTable.getValue(selectedItem.row, 2), 'silver'],
+                    ['Bronze', countryDataTable.getValue(selectedItem.row, 3), '#b87333'],
+                    ['Total', countryDataTable.getValue(selectedItem.row, 4), 'black']
+                ]);
+            barChart.draw(barChartTable, options);
+        }
+        function drawPieChart()
+        {
+            var pieData = new google.visualization.DataTable();
+            pieData.addColumn('string', 'Sport');
+            pieData.addColumn('number', 'Medals');
+
+            jQuery.ajax({
+                url: "/Sports/" + currentCountry + "/" + currentYear,
+                dataType: "JSON",
+                async: false
+            }).done(function (data) {
+                jQuery.each(data, function () {
+                    pieData.addRow([
+                            this.Sport,
+                            this.TotalMedals
+                        ]);
+                    });
+            })
+
+
+            var options = {
+                title: 'Medal Distribution'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('sportpie_div'));
+
+            chart.draw(pieData, options)
+        }
+        function drawAthleteTable() {
+            var athleteTable = new google.visualization.Table(document.getElementById('Athletetable_div'));
+
+            jQuery.ajax({
+                url: "/Athletes/" + currentCountry + "/" + currentYear,
+                dataType: "JSON",
+                async: false
+            }).done(function (data) {
+                athleteData = new google.visualization.DataTable();
+                athleteData.addColumn('string', "Name");
+                athleteData.addColumn('number', "Age");
+                athleteData.addColumn('string', "Sport");
+                athleteData.addColumn('number', "Gold");
+                athleteData.addColumn('number', "Silver");
+                athleteData.addColumn('number', "Bronze");
+                athleteData.addColumn('number', "Total");
+
+                jQuery.each(data, function () {
+                    athleteData.addRow([
+                        this.Name,
+                        this.Age,
+                        this.Sport,
+                        this.GoldMedals,
+                        this.SilverMedals,
+                        this.BronzeMedals,
+                        this.TotalMedals
+                    ]);
+                });
+
+                var athleteTableOptions =
+               {
+                   pageSize: 25,
+                   sortAscending: false,
+                   sortColumn: 0,
+                   showRowNumber: true,
+                   pagingSymbols: { prev: 'prev', next: 'next' },
+                   pagingButtonsConfiguration: 'both'
+               };
+
+                athleteTable.draw(athleteData, athleteTableOptions);
+
+            })
+        }
+        function drawCountryTable() {
+            jQuery.ajax({
+                url: "/Countries/" + currentYear + "/?count=" + currentCountryTableCount + "&start=" + currentCountryPage * currentCountryTableCount + "&sort=" + currentCountrySort + "&sortIndex=" + currentCountrySortProperty,
+                dataType: "JSON",
+                async: false 
+            }).done(function (data) {
+                countryDataTable = new google.visualization.DataTable();
+                countryDataTable.addColumn('string', "Country");
+                countryDataTable.addColumn('number', "Gold Medals");
+                countryDataTable.addColumn('number', "Silver Medals");
+                countryDataTable.addColumn('number', "Bronze Medals");
+                countryDataTable.addColumn('number', "Total Medals");
+
+                jQuery.each(data, function () {
+                    countryDataTable.addRow([
+                        this.Name,
+                        this.GoldMedals,
+                        this.SilverMedals,
+                        this.BronzeMedals,
+                        this.TotalMedals
+                    ]);
+                });
+
+                countryChartTable.draw(countryDataTable, countryChartTableOptions);
+
+            })
+        }
+
+        function setSorting(isAscending, columnIndex)
+        {
+
+            if (isAscending)
+                currentCountrySort = "AS";
+            else
+                currentCountrySort = "DS";
+
+            switch (columnIndex)
+            {
+                case 0: currentCountrySortProperty = "Name"; break;
+                case 1: currentCountrySortProperty = "GoldMedals"; break;
+                case 2: currentCountrySortProperty = "SilverMedals"; break;
+                case 3: currentCountrySortProperty = "BronzeMedals"; break;
+                case 4: currentCountrySortProperty = "TotalMedals"; break;
+            }
+
+            drawCountryTable();
+            manualSelection();
+        }
+        function setPageSize(value)
+        {
+            countryChartTableOptions['pageSize'] = currentCountryTableCount = value;
+            drawCountryTable();
+            manualSelection();
+        }
+        function setYear(year) 
+        {
+            currentYear = year;
+            drawCountryTable();
+            manualSelection();
+        }
+
+    </script>
+</head>
+
+<body>
+
+
+    <h1 id="current_country" style="font-family:Arial">
+
+    </h1>
+    <form style="font-size:x-large">
+        <select name="cmbxYears" onchange="setYear(parseInt(this.value, 10))">
+            <option value="2000">2000</option>
+            <option value="2002">2002</option>
+            <option value="2004">2004</option>
+            <option value="2006">2006</option>
+            <option value="2008">2008</option>
+            <option value="2010">2010</option>
+            <option selected=selected value="2012">2012</option>
+        </select>
+    </form>
+    <ul style="align-self:center">
+        <li style="display:inline-block">
+            <div id="medalBarCharth_div" style="width: 400px; height: 400px; left"></div>
+        </li>
+        <li style="display:inline-block">
+            <div id="sportpie_div" style="width: 500px; height: 500px;"></div>
+        </li>
+    </ul>
+    <form>
+        Countries Per page:
+        <select onchange="setPageSize(parseInt(this.value, 10))">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option selected=selected value ="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </form>
+    <div id="Countrytable_div"></div>
+
+    <div id="Athletetable_div" style="margin-top: 50px"></div>
+
+</body>
+</html>
