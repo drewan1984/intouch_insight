@@ -14,7 +14,7 @@
 10. Open Visual Studio 2013 Community Edition as Administrator. Right-Click Visual Studio shortcut and select "Run as Administrator".
 11. From Visual Studio select "FILE -> OPEN -> Project/Solution" and locate the recently downloaded source files you download from GitHub. Once located select: **MedalService.sln**
 12. Once the solution has opened in Visual Studio,  right-click the solution node "Solution 'MedalService'" from the Solution Explorer and select "Enable Nuget Package Restore."
-13. Build the solution. While building the nuget package dependecies should automatically be downloaded and referenced by the projects needing them.
+13. Build the solution. While building the nuget package dependencies should automatically be downloaded and referenced by the projects needing them.
 
 
 ### Application Start Up
@@ -32,9 +32,12 @@
 	* **Testing:** *NUnit (.NET)*
 * **Data Storage:** MongoDB
 
-### Known Issues
-
-### Future Enhancements
-
-### Developer Notes
+### Development Notes / Pitfalls / Known Issues
+* The installation process should have been automated. Batch scripts may been helpful.
+* The MongoDB server should have been configured as a Windows service.
+* The intent was to start development within windows and then migrate to Linux (Mono + MonoDevelopIDE). This would provide for easier automation scripting.
+* The OlympicAthletes.xlsx was manually downloaded and then converted using Excel. The intent was to write a script and then use 'wget' to download .xlxs and then hopefully use an opensource tool to convert from .xlsx to .csv. The .csv file would then be imported into mongodb using the mongoimport (linux equivalent) utility. 
+* In hindsight I should have developed the Front-end with Silverlight instead of Javascript and HTML. I spent much of my time  googling syntax and the JavaScript library (eg. JQuery,Google Charts) apis. 
+* Unfortunately I was only able to provide unit testing for my back-end data service interface. I did not have time to learn the Nancy Testing framework.
+* Overall working on this application has been positve learning experience. 
 
