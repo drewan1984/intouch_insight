@@ -3,8 +3,8 @@
 ### Setup
 
 1. Locate a system running a modern version of Windows (Windows 7, 32/64bit, Windows 8, 32/64bit). 
-2. Download and install [Microsoft Visual Studio 2013 Community Edition]( http://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx)
-3. Download and (*Typical*) install [MongoDB](https://www.mongodb.org/download) for your Windows system.
+2. Download and install [Microsoft Visual Studio 2013 Community Edition]( http://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx) on your Windows system.
+3. Download and (*Typical*) install [MongoDB](https://www.mongodb.org/download) on your Windows system.
 4. Get your MongoDB enivornment ready by creating the following directories: *"C:/data"* and *"C:/data/db"*. Once the MongoDB server is running this is where it expects the database files to be located.
 5. Open a Windows command console and navigate to your MongoDB installation directory. (eg. *"C:/%ProgramFiles%/MongoDB 2.X Standard"*).
 6. Locate the  *bin/* directory found within your MongoDB installation directory. Start the mongo database server by running *mongod.exe*.
